@@ -21,7 +21,7 @@ func Redirect(w http.ResponseWriter, r *http.Request)  {
 	longLink, err := datastore.Rdb.Get(ctx, shortLink).Result()
 
 	if err == redis.Nil || err != nil {
-		err = datastore.GetDb().QueryRow(ctx, "SELECT longlink FROM bear_links WHERE shortlink = $1", shortLink).Scan(&longLink)
+		err = datastore.GetDb().QueryRow(ctx, "SELECT longlink FROM bear_links WHERE shortlink = $1 AND enabled = true", shortLink).Scan(&longLink)
 
 		if err != nil {
 			http.Error(w, "Short Link does not exist", http.StatusNotFound)
